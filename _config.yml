@@ -1,28 +1,35 @@
 # Site settings
-title: ifbear Blog
-SEOTitle: ifbear博客 | ifbear Blog
-header-img: img/home-bg.jpg
-email: sundexiong@hotmail.com
-description: "世界很大，我们很好"
-keyword: "ifbear, bear, iOS, Objective-C, Swift"
-url: "https://ifbear.github.io"              # your host, for absolute URL
-baseurl: ""         # for example, '/blog' if your blog hosted on 'host/blog'
+title: 微码生活
+SEOTitle: 程序员小李 | 微码生活
+header-img: img/home1.jpeg
+email: 906099632@qq.com
+description: "LXY Blog   "
+keyword: "LXY Blog"
+url: "https://xlgy.github.io"          # your host, for absolute URL
+baseurl: ""      # for example, '/blog' if your blog hosted on 'host/blog'
+github_repo: "https://github.com/xlgy/xlgy.github.io.git" # you code repository
 
-future: true
+# Sidebar settings
+sidebar: true                           # whether or not using Sidebar.
+sidebar-about-description: "Goals determine what you going to be!"
+sidebar-avatar: /img/home.jpeg     # use absolute URL, seeing it's used in both `/` and `/about/`
+
+
 
 # SNS settings
 RSS: false
-#weibo_username:     X个De
-#zhihu_username:     ifbear
-#github_username:    ifbear
-#twitter_username:   ifbear
-#facebook_username:  ifbear
+# weibo_username:     xlgy
+#zhihu_username:     xlgy
+github_username:    xlgy
+#facebook_username:  baiying.qiu.7
+#jianshu_username:   e71990ada2fd
+#twitter_username:   xlgy
+
 
 
 
 # Build settings
 # from 2016, 'pygments' is unsupported on GitHub Pages. Use 'rouge' for highlighting instead.
-highlighter: rouge
 permalink: pretty
 paginate: 10
 exclude: ["less","node_modules","Gruntfile.js","package.json","README.md"]
@@ -32,7 +39,8 @@ anchorjs: true                          # if you want to customize anchor. check
 
 # Gems
 # from PR#40, to support local preview for Jekyll 3.0
-plugins: [jekyll-paginate]
+gems: [jekyll-paginate]
+
 
 
 
@@ -41,48 +49,55 @@ plugins: [jekyll-paginate]
 # although redcarpet can auto highlight code, the lack of header-id make the catalog impossible, so I switch to kramdown
 # document: http://jekyllrb.com/docs/configuration/#kramdown
 markdown: kramdown
+highlighter: rouge
 kramdown:
   input: GFM                            # use Github Flavored Markdown !important
 
 
 
-# Disqus settings
-#disqus_username: _your_disqus_short_name_
+# 评论系统
+# Disqus（https://disqus.com/）
+# disqus_username: qiubaiying
 
-# Duoshuo settings
-# duoshuo_username: ifbear
-# Share component is depend on Comment so we can NOT use share only.
-# duoshuo_share: true                     # set to false if you want to use Comment without Sharing
+# Gitalk
+#gitalk:
+  #enable: false    #是否开启Gitalk评论
+  #clientID: f2c84e7629bb1446c1a4                            #生成的clientID
+  #clientSecret: ca6d6139d1e1b8c43f8b2e19492ddcac8b322d0d    #生成的clientSecret
+  #repo: qiubaiying.github.io    #仓库名称
+  #owner: qiubaiying    #github用户名
+  #admin: qiubaiying
+  #distractionFreeMode: true #是否启用类似FB的阴影遮罩
 
 
-
+# 统计
 
 # Analytics settings
 # Baidu Analytics
-# ba_track_id: 4cc1f2d8f3067386cc5cdb626a202900
+# ba_track_id: b50bf2b12b5338a1845e33832976fd68
+
 # Google Analytics
-# ga_track_id: 'UA-49627206-1'            # Format: UA-xxxxxx-xx
-# ga_domain: ifbear.me
+# ga_track_id: 'UA-90855596-1'            # Format: UA-xxxxxx-xx
+# ga_domain: qiubaiying.top               # 默认的是 auto, 这里我是自定义了的域名，你如果没有自己的域名，需要改成auto
 
 
-
-# Sidebar settings
-sidebar: true                           # whether or not using Sidebar.
-sidebar-about-description: "写写代码，追追剧，看看书。世界那么大，多玩玩看看。记着每天开心哟！"
-sidebar-avatar: /img/avatar-ifbear.png     # use absolute URL, seeing it's used in both `/` and `/about/`
 
 
 
 # Featured Tags
-featured-tags: true                     # whether or not using Feature-Tags
-featured-condition-size: 1              # A tag will be featured if the size of it is more than this condition value
+featured-tags: true                     # 是否使用首页标签
+featured-condition-size: 0              # 相同标签数量大于这个数，才会出现在首页
+
 
 
 
 # Friends
 friends: [
-    {
-        title: "ifbear Blog",
-        href: "https://ifbear.github.io/"
+{
+        title: "Apple",
+        href: "https://apple.com"
+    },{
+        title: "Apple Developer",
+        href: "https://developer.apple.com/"
     }
 ]
