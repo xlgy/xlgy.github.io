@@ -1,6 +1,6 @@
 # Site settings
 title: 微码生活
-SEOTitle: 小李|微码生活
+SEOTitle: 程序员小李 | 微码生活
 header-img: img/home1.jpeg
 email: 906099632@qq.com
 description: "LXY Blog   "
@@ -10,10 +10,18 @@ baseurl: ""      # for example, '/blog' if your blog hosted on 'host/blog'
 
 future: true
 
-
+# SNS settings
 RSS: false
-github_username:    xlgy
+#weibo_username:     X个De
+#zhihu_username:     ifbear
+#github_username:    ifbear
+#twitter_username:   ifbear
+#facebook_username:  ifbear
 
+
+
+# Build settings
+# from 2016, 'pygments' is unsupported on GitHub Pages. Use 'rouge' for highlighting instead.
 highlighter: rouge
 permalink: pretty
 paginate: 10
@@ -22,24 +30,52 @@ anchorjs: true                          # if you want to customize anchor. check
 
 
 
+# Gems
+# from PR#40, to support local preview for Jekyll 3.0
 plugins: [jekyll-paginate]
 
 
 
+# Markdown settings
+# replace redcarpet to kramdown,
+# although redcarpet can auto highlight code, the lack of header-id make the catalog impossible, so I switch to kramdown
+# document: http://jekyllrb.com/docs/configuration/#kramdown
 markdown: kramdown
 kramdown:
   input: GFM                            # use Github Flavored Markdown !important
 
+
+
+# Disqus settings
+#disqus_username: _your_disqus_short_name_
+
+# Duoshuo settings
+# duoshuo_username: ifbear
+# Share component is depend on Comment so we can NOT use share only.
+# duoshuo_share: true                     # set to false if you want to use Comment without Sharing
+
+
+
+
+# Analytics settings
+# Baidu Analytics
+# ba_track_id: 4cc1f2d8f3067386cc5cdb626a202900
+# Google Analytics
+# ga_track_id: 'UA-49627206-1'            # Format: UA-xxxxxx-xx
+# ga_domain: ifbear.me
+
+
+
 # Sidebar settings
 sidebar: true                           # whether or not using Sidebar.
-sidebar-about-description: "Goals determine what you going to be!"
+sidebar-about-description: "得之坦然,失之淡然,争其必然,顺其自然!"
 sidebar-avatar: /img/home.jpeg     # use absolute URL, seeing it's used in both `/` and `/about/`
 
 
 
 # Featured Tags
 featured-tags: true                     # whether or not using Feature-Tags
-featured-condition-size: 0              # A tag will be featured if the size of it is more than this condition value
+featured-condition-size: 0             # A tag will be featured if the size of it is more than this condition value
 
 
 
