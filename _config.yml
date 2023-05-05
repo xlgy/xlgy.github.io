@@ -1,10 +1,10 @@
 # Site settings
-title: ifbear Blog
-SEOTitle: ifbear博客 | ifbear Blog
-header-img: img/home-bg.jpg
-email: sundexiong@hotmail.com
-description: "世界很大，我们很好"
-keyword: "ifbear, bear, iOS, Objective-C, Swift"
+title: 微码生活
+SEOTitle: 程序员小李 | 微码生活
+header-img: img/home1.jpeg
+email: 906099632@qq.com
+description: "主动进化"
+keyword: "iOS Android flutter OC Swift kotlin"
 url: "https://ifbear.github.io"              # your host, for absolute URL
 baseurl: ""         # for example, '/blog' if your blog hosted on 'host/blog'
 
