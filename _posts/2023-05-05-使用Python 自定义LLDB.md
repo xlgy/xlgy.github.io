@@ -4,7 +4,7 @@ title:      使用Python 自定义LLDB
 subtitle:   使用Python 自定义LLDB
 date:       2023-05-05
 author:     LXY
-header-img: img/home1.jpg
+header-img: img/home1.jpeg
 catalog: true
 tags:
     - iOS
