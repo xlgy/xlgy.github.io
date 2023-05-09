@@ -9,20 +9,20 @@ catalog: true
 tags:
     - flutter
 ---
-#一、前言
+# 一、前言
 学习flutter也有一段时间了，今天挑战一下自己，手动完成一个富文本SDK。在本人的移动端职业生涯中，经历过几个大家所说的“**大厂**”的工作，发现很多“**大厂**”都有自己原生端的动态富文本库，来适配各种运营位的展示和交互，基本的实现原理都由服务端下发动态配置，再有客户端富文本SDK进行解析并渲染，实现在不发版的情况下动态更新富文本。
 
 ![](https://images.xiaozhuanlan.com/photo/2022/8f0b0826d72042bde54d42c3dd2c5a94.png)
 
 
-#二、实现
+# 二、实现
 
-##1、 创建纯dart插件 package
+## 1、 创建纯dart插件 package
 ```
 flutter create --template=package lxy_rich_text_from_json
 ```
 
-##2、 确定配置json
+## 2、 确定配置json
 
 由于是初次尝试，优先实现一个简单配置的版本，只控制富文本的颜色和字体大小
 ```
@@ -57,7 +57,7 @@ flutter create --template=package lxy_rich_text_from_json
 
 **子数组的权重要高于全局的样式权重!!!**
 
-##3、 组件实现
+## 3、 组件实现
 
 ```
 library lxy_rich_text_from_json;
@@ -144,7 +144,7 @@ class _RichTextViewState extends State<RichTextView> {
 
 **JSON解析 ——> 生成富文本数组 ——> 渲染**
 
-##4、 调用并展示
+## 4、 调用并展示
 ```
 RichTextView('{"message":"一二三四五六七八九","textSize":20,"textColor":"FF0000","richTexts":[{"textSize":44,"textColor":"23238E","startIndex":0,"endIndex":3},{"textSize":66,"textColor":"545454","startIndex":5,"endIndex":7}]}')
 ```
@@ -152,12 +152,12 @@ RichTextView('{"message":"一二三四五六七八九","textSize":20,"textColor"
 
 
 
-#三、发布前的工作
-##1、将代码提交到gitbub
+# 三、发布前的工作
+## 1、将代码提交到gitbub
 将仓库代码提交到github，我的仓库地址：https://github.com/xlgy/rich_text_from_json
 
 
-##2、更新pubspec.yaml
+## 2、更新pubspec.yaml
 ```
 name: lxy_rich_text_from_json
 description: json配置动态富文本
@@ -169,7 +169,7 @@ description：描述
 version：版本号
 homepage：github仓库地址
 
-##3、更新CHANGLOG.md
+## 3、更新CHANGLOG.md
 更新说明文案
 ```
 ## 0.0.3
@@ -186,7 +186,7 @@ homepage：github仓库地址
 README会显示在pub的Readme中：
 ![](https://images.xiaozhuanlan.com/photo/2022/f2ababea13d860129e65de2fc149b8b2.png)
 
-##5、运行 dry-run 命令
+## 5、运行 dry-run 命令
 在package根目录下运行 dry-run 命令以查看是否都准备OK了:
 ```
 flutter packages pub publish --dry-run
@@ -212,6 +212,6 @@ flutter packages pub publish --server=https://pub.dartlang.org
 ![](https://images.xiaozhuanlan.com/photo/2022/afac51cf90af4dab698bd68867dc9cc8.png)
 
 
-#四、结果链接
+# 四、结果链接
 pub.dev链接：https://pub.dev/packages/lxy_rich_text_from_json
 GitHub链接：https://github.com/xlgy/rich_text_from_json
