@@ -326,7 +326,7 @@ Timer的触发流程大致是这样的：
 - 线程和RunLoop是一一对应的,其映射关系是保存在一个全局的 Dictionary 里
 - 自己创建的线程默认是没有开启RunLoop的
 
-###怎么创建一个常驻线程？
+### 怎么创建一个常驻线程？
 1. 为当前线程开启一个RunLoop（第一次调用 [NSRunLoop currentRunLoop]方法时实际是会先去创建一个RunLoop）
 2. 向当前RunLoop中添加一个Port/Source等维持RunLoop的事件循环（如果RunLoop的mode中一个item都没有，RunLoop会退出）
 3. 启动该RunLoop
@@ -342,7 +342,7 @@ Timer的触发流程大致是这样的：
     }
 ```
 
-###怎样保证子线程数据回来更新UI的时候不打断用户的滑动操作？
+### 怎样保证子线程数据回来更新UI的时候不打断用户的滑动操作？
 
 当我们在子请求数据的同时滑动浏览当前页面，如果数据请求成功要切回主线程更新UI，那么就会影响当前正在滑动的体验。
 
@@ -351,7 +351,7 @@ Timer的触发流程大致是这样的：
 [self performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO modes:@[NSDefaultRunLoopMode]];
 ```
 
-###易错代码分析
+### 易错代码分析
 ```
 NSLog(@"1");
 dispatch_async(dispatch_get_global_queue(0, 0), ^{
@@ -412,13 +412,13 @@ NSLog(@"4");
 14253，test方法会执行。
 
 # 6、PerformSelector 相关
-###PerformSelector 的实现原理？
+### PerformSelector 的实现原理？
 当调用 NSObject 的 performSelecter:afterDelay: 后，实际上其内部会创建一个 Timer 并添加到当前线程的 RunLoop 中。所以如果当前线程没有 RunLoop，则这个方法会失效。
 
 当调用 performSelector:onThread: 时，实际上其会创建一个 Timer 加到对应的线程去，同样的，如果对应线程没有 RunLoop 该方法也会失效。
 
 
-###PerformSelector:afterDelay:这个方法在子线程中是否起作用？为什么？怎么解决？
+### PerformSelector:afterDelay:这个方法在子线程中是否起作用？为什么？怎么解决？
 不起作用，子线程默认没有 Runloop，也就没有 Timer。
 解决的办法是可以使用 GCD 来实现：Dispatch_after
 
