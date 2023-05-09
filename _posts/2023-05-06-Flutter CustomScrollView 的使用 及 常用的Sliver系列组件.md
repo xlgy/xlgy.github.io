@@ -13,6 +13,7 @@ tags:
 CustomScrollView是可以使用Sliver来自定义滚动模型（效果）的组件。它可以包含多种滚动模型。包括header，footer，CustomScrollView可以实现把多个彼此独立的可滑动widget组合起来。
 
 ## CustomScrollView 一"码"当先
+
 ```
   Widget mCustomScrollView() {
     return CustomScrollView(
@@ -64,6 +65,7 @@ CustomScrollView是可以使用Sliver来自定义滚动模型（效果）的组�
     );
   }
 ```
+
 效果：
 
 ![](https://images.xiaozhuanlan.com/photo/2022/8eb7c779b33e051f6653dc9d06d576a6.png)
@@ -80,15 +82,18 @@ SliverList只有一个属性：delegate，类型是SliverChildDelegate。SliverC
 
 ### SliverChildListDelegate
 先来看SliverChildListDelegate，声明如下：
+
 ```
 SliverChildListDelegate(
     this.children, {
     ...
   })
 ```
+
 只有一个必填属性children，是一个类型为Widget的List集合。其他属性几乎不用，暂时忽略。跟ListView构造函数相同，会将所有的子组件一次性的全部渲染出来。
 
 代码示例：
+
 ```
   Widget mSliverList(){
     return SliverList(
@@ -116,8 +121,10 @@ SliverChildListDelegate(
         ]));
   }
 ```
+
 ### SliverChildBuilderDelegate
 SliverChildBuilderDelegate则跟ListView.build构造函数类似，需要时才会创建，提高了性能。
+
 ```
 const SliverChildBuilderDelegate(
     this.builder, {
@@ -125,11 +132,15 @@ const SliverChildBuilderDelegate(
     ...
   })
 ```
+
 主要参数是builder，是一个返回值为Widget的函数，原型如下：
+
 ```
 Widget Function(BuildContext context, int index)
 ```
+
 代码示例：
+
 ```
   Widget mSliverList2() {
     return SliverList(
@@ -143,10 +154,12 @@ Widget Function(BuildContext context, int index)
     );
   }
 ```
+
 ### SliverFixedExtentList
 SliverFixedExtentList是固定item高度的SliverList，只是比SliverList多了一个参数itemExtent来设置item高度，其用法跟SliverList一致。
 
 代码示例:
+
 ```
 Widget mSliverFixedExtentList() {
     return SliverFixedExtentList(
@@ -169,6 +182,7 @@ SliverGridDelegate是一个抽象类，定义了子控件Layout相关的接口�
 #### SliverGridDelegateWithFixedCrossAxisCount
 
 该类实现了一个横轴方向上固定子控件数量的layout的算法，构造函数为：
+
 ```
 SliverGridDelegateWithFixedCrossAxisCount({
   @required double crossAxisCount, 
@@ -177,6 +191,7 @@ SliverGridDelegateWithFixedCrossAxisCount({
   double childAspectRatio = 1.0,
 })
 ```
+
 - crossAxisCount：横轴子元素的数量。此属性值确定后子元素在横轴的长度就确定了，即横轴长度除以crossAxisCount的商。
 - mainAxisSpacing：主轴方向的间距。
 - crossAxisSpacing：横轴方向子元素的间距。
@@ -187,6 +202,7 @@ SliverGridDelegateWithFixedCrossAxisCount({
 #### SliverGridDelegateWithMaxCrossAxisExtent
 
 该类实现了一个横轴方向上子元素为固定最大长度的layout算法，其构造函数为：
+
 ```
 SliverGridDelegateWithMaxCrossAxisExtent({
   double maxCrossAxisExtent,
@@ -203,6 +219,7 @@ SliverGrid的使用方法跟GridView的使用方法保持一致。
 
 ### SliverAnimatedList
 SliverAnimatedList是带有动画的SliverList，先来看构造函数：
+
 ```
 SliverAnimatedList({
     Key key,
@@ -210,19 +227,25 @@ SliverAnimatedList({
     this.initialItemCount = 0,
   })
 ```
+
 - initialItemCount：item的个数。
 - itemBuilder：是一个AnimatedListItemBuilder函数，原型如下：
+
 ```
 Widget Function(BuildContext context, int index, Animation<double> animation)
 ```
+
 使用SliverAnimatedList在添加或删除item的时候，需要通过一下方式来操作：
 
 - 1.定义一个GlobalKey
+
 ```
 GlobalKey<SliverAnimatedListState> _listKey = GlobalKey<SliverAnimatedListState>(); 
 
 ```
+
 - 2.将key赋值给SliverAnimatedList
+
 ```
 SliverAnimatedList(
               key: _listKey,
@@ -230,7 +253,9 @@ SliverAnimatedList(
               itemBuilder: _buildItem,
             )
 ```
+
 - 3.通过key.currentState.insertItem或key.currentState.removeItem来进行添加或删除。
+
 ```
 _listKey.currentState.insertItem(_index);
 _listKey.currentState.removeItem(_index,
@@ -238,6 +263,7 @@ _listKey.currentState.removeItem(_index,
 ```
 
 - 4._buildItem函数原型如下：
+
 ```
 Widget _buildItem(BuildContext context, int index, Animation<double> animation) {
     return SizeTransition(
@@ -252,6 +278,7 @@ Widget _buildItem(BuildContext context, int index, Animation<double> animation) 
     );
   }
 ```
+
 如果想修改动画类型，就需要修改_buildItem中的动画方式。
 
 
@@ -300,6 +327,7 @@ return CustomScrollView(
 ```
 
 动画1：
+
 ```
 Widget _buildItem(String _item, Animation _animation) {
   return SlideTransition(
@@ -317,7 +345,9 @@ Widget _buildItem(String _item, Animation _animation) {
 }
  
 ```
+
 动画2：
+
 ```
 Widget _buildItem(String _item, Animation _animation) {
   return SizeTransition(
@@ -334,7 +364,9 @@ Widget _buildItem(String _item, Animation _animation) {
 ```
 
 ### SliverPersistentHeader
+
 这个组件可以实现控件吸顶的效果。先来看构造函数：
+
 ```
 SliverPersistentHeader({
     Key key,
@@ -343,8 +375,10 @@ SliverPersistentHeader({
     this.floating = false,
   })
 ```
+
 其中pinned的效果就是控制header是否保持吸顶效果。另一个重要的属性则是delegate，它的类型是SliverPersistentHeaderDelegate，这是一个抽象类，所以要使用的话，需要自己定义一个子类。
 子类需要重写4个父类的函数：
+
 ```
 @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
@@ -366,10 +400,12 @@ SliverPersistentHeader({
     throw UnimplementedError();
   }
 ```
+
 其中build返回header显示的内容，maxExtent和minExtent表示最大值和最小值，即header展开和闭合时的高度，若相同则header高度保持不变，若不同，则滚动的时候header的高度会自动在两只之间进行变化。shouldRebuild表示是否需要重新绘制，需要的话则返回true。
 
 ### SliverAppBar
 构造函数：
+
 ```
 SliverAppBar({
     this.flexibleSpace,
@@ -384,6 +420,7 @@ SliverAppBar({
     ...
   })
 ```
+
 其他的参数都跟AppBar是一致的，就忽略了。其中有一些重要的参数：
 
 - expandedHeight：展开时AppBar的高度。
@@ -402,6 +439,7 @@ FlexibleSpaceBar是Flutter提供的一个现成的空间大小可变的组件，
 - zoomBackground：默认值，拉伸时widget将填充额外的空间。
 
 示例：
+
 ```
 
 SliverAppBar(
