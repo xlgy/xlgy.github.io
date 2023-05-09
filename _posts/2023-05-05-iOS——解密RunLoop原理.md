@@ -127,13 +127,14 @@ if (!poll && (currentMode->_observerMask & kCFRunLoopBeforeWaiting)) {
 
 
 **第三步**
+
 进入休眠后，会等待 mach_port 的消息，以再次唤醒。只有在下面四个事件出现时才会被再次唤醒：
 - 基于 port 的 Source 事件；
 - Timer 时间到；
 - RunLoop 超时；
 - 被调用者唤醒。
-```
 
+```
 do {
     __CFRunLoopServiceMachPort(waitSet, &msg, sizeof(msg_buffer), &livePort) {
         // 基于 port 的 Source 事件、调用者唤醒
@@ -150,6 +151,7 @@ do {
 **第四步**
 
 唤醒时通知 Observer：RunLoop 的线程刚刚被唤醒了。
+
 ```
 if (!poll && (currentMode->_observerMask & kCFRunLoopAfterWaiting))
     __CFRunLoopDoObservers(runloop, currentMode, kCFRunLoopAfterWaiting);
@@ -163,6 +165,7 @@ RunLoop 被唤醒后就要开始处理消息了：
 - 如果是 source1 事件的话，就处理这个事件。
 
 消息执行完后，就执行加到 loop 里的 block。
+
 ```
 
 handle_msg:
@@ -184,8 +187,11 @@ else {
     }
 }
 ```
+
 **第六步**
+
 根据当前 RunLoop 的状态来判断是否需要走下一个 loop。当被外部强制停止或 loop 超时时，就不继续下一个 loop 了，否则继续走下一个 loop 。
+
 ```
 
 if (sourceHandledThisLoop && stopAfterHandle) {
@@ -202,11 +208,14 @@ if (sourceHandledThisLoop && stopAfterHandle) {
     retVal = kCFRunLoopRunFinished;
 }
 ```
+
 整个 RunLoop 过程，我们可以总结为如下所示的一张图片。
 ![](https://images.xiaozhuanlan.com/photo/2022/4fc04d50a2d911df6d8ef508bd55983e.webp)
 
 **总结**
+
 将整个流程总结成伪代码如下：
+
 ```
 
 /// RunLoop的实现
@@ -383,9 +392,11 @@ CFRunLoopRef和CFRunloopMode、CFRunLoopSourceRef/CFRunloopTimerRef/CFRunLoopObs
 ![](https://images.xiaozhuanlan.com/photo/2022/a1cea8833d7dab00ed9151ffe0c5fce7.png)
 
 **2、RunLoop Source**
+
 苹果文档将RunLoop能够处理的事件分为Input sources和timer事件。下面这张图取自苹果官网:
 ![](https://images.xiaozhuanlan.com/photo/2022/28b88c411f421839be65945e28a9ebdc.jpg)
 根据CF的源码，Input source在RunLoop中被分类成source0和source1两大类。source0和source1均有结构体__CFRunLoopSource表示：
+
 ```
 struct __CFRunLoopSource {
     CFRuntimeBase _base;
@@ -453,16 +464,21 @@ source0和source1由联合_context来做代码区分：
 - CADisplayLink(通过向RunLoop投递source1 实现回调)
 
 NSObject perform系列函数中的dealy类型, 其实也是一种Timer事件，可能不那么明显：
+
 ```
 - (void)performSelector:(SEL)aSelector withObject:(nullable id)anArgument afterDelay:(NSTimeInterval)delay inModes:(NSArray<NSRunLoopMode> *)modes;
 - (void)performSelector:(SEL)aSelector withObject:(nullable id)anArgument afterDelay:(NSTimeInterval)delay;
 ```
+
 这种Perform delay的函数底层的实现是和NSTimer一样的，根据苹果官方文档所述：
+
 ```
 This method sets up a timer to perform the aSelector message on the current thread’s run loop. The timer is configured to run in the default mode (NSDefaultRunLoopMode). When the timer fires, the thread attempts to dequeue the message from the run loop and perform the selector. It succeeds if the run loop is running and in the default mode; otherwise, the timer waits until the run loop is in the default mode.
 If you want the message to be dequeued when the run loop is in a mode other than the default mode, use the performSelector:withObject:afterDelay:inModes: method instead. 
 ```
+
 翻译：
+
 ```
 此方法设置一个计时器，以便在当前线程的run loop上执行aSelector消息。timer配置为在默认模式（NSDefaultRunLoopMode）下运行。当timer触发时，线程尝试从运行循环中退出消息队列并执行selector。如果run loop正在运行且处于default mode，则会成功；否则，计时器将等待运行循环处于default mode。
 
@@ -472,6 +488,7 @@ If you want the message to be dequeued when the run loop is in a mode other than
 
 **NSTimer & PerformSelector:afterDelay:**
 NSTimer在CF源码中的结构是这样的：
+
 ```
 struct __CFRunLoopTimer {
     CFRuntimeBase _base;
@@ -488,6 +505,7 @@ struct __CFRunLoopTimer {
     CFRunLoopTimerContext _context; /* immutable, except invalidation */
 };
 ```
+
 Timer的触发流程大致是这样的：
 - 用户添加timer到runloop的某个或几个mode下
 - 根据timer是否设置了tolerance，如果没有设置，则调用底层xnu内核的mk_timer注册一个mach-port事件，如果设置了tolerance，则注册一个GCD timer
@@ -503,6 +521,7 @@ Timer的触发流程大致是这样的：
 **4、RunLoop Observer**
 
 Observer在CF中的结构如下：
+
 ```
 struct __CFRunLoopObserver {
     CFRuntimeBase _base;
@@ -515,6 +534,7 @@ struct __CFRunLoopObserver {
     CFRunLoopObserverContext _context;  /* immutable, except invalidation */
 };
 ```
+
 Observer的作用是可以让外部监听RunLoop的运行状态，从而根据不同的时机，做一些操作。
 系统会在APP启动时，向main RunLoop里注册了两个 Observer，其回调都是 _wrapRunLoopWithAutoreleasePoolHandler()。
 
@@ -526,6 +546,7 @@ _objc_autoreleasePoolPush() 创建自动释放池。其 order 是-2147483647，�
 释放旧的池并创建新池；Exit(即将退出Loop) 时调用 _objc_autoreleasePoolPop() 来释放自动释放池。这个Observer 的 order 是 2147483647，优先级最低，保证其释放池子发生在其他所有回调之后。在主线程执行的代码，通常是写在诸如事件回调、Timer回调内的。这些回调会被 RunLoop 创建好的 AutoreleasePool环绕着，所以不会出现内存泄漏，开发者也不必显示创建 Pool 了。
 
 **Observer可以监听的事件在CF中以位异或表示：**
+
 ```
 /* Run Loop Observer Activities */
 	typedef CF_OPTIONS(CFOptionFlags, CFRunLoopActivity) {
@@ -546,6 +567,7 @@ _objc_autoreleasePoolPush() 创建自动释放池。其 order 是-2147483647，�
 
 **5、Call out**
 在开发过程中几乎所有的操作都是通过Call out进行回调的(无论是Observer的状态通知还是Timer、Source的处理)，而系统在回调时通常使用如下几个函数进行回调(换句话说你的代码其实最终都是通过下面几个函数来负责调用的，即使你自己监听Observer也会先调用下面的函数然后间接通知你，所以在调用堆栈中经常看到这些函数)：
+
 ```
 	static void __CFRUNLOOP_IS_CALLING_OUT_TO_AN_OBSERVER_CALLBACK_FUNCTION__();
 	static void __CFRUNLOOP_IS_CALLING_OUT_TO_A_BLOCK__();
@@ -554,6 +576,7 @@ _objc_autoreleasePoolPush() 创建自动释放池。其 order 是-2147483647，�
 	static void __CFRUNLOOP_IS_CALLING_OUT_TO_A_SOURCE0_PERFORM_FUNCTION__();
 	static void __CFRUNLOOP_IS_CALLING_OUT_TO_A_SOURCE1_PERFORM_FUNCTION__();
 ```
+
 例如在控制器的touchBegin中打入断点查看堆栈（由于UIEvent是Source0，所以可以看到一个Source0的Call out函数CFRUNLOOP_IS_CALLING_OUT_TO_A_SOURCE0_PERFORM_FUNCTION调用）：
 
 ![](https://images.xiaozhuanlan.com/photo/2022/1e5b46ef0e3523b1b110facf95ac382d.png)
@@ -568,6 +591,7 @@ iOS开发中能遇到两个线程对象: pthread_t和NSThread，pthread_t和NSTh
 线程与RunLoop是一一对应的关系（对应关系保存在一个全局的Dictionary里），线程创建之后是没有RunLoop的（主线程除外），RunLoop的创建是发生在第一次获取时,销毁则是在线程结束的时候。只能在当前线程中操作当前线程的RunLoop,而不能去操作其他线程的RunLoop。
 
 **一"码"当先**
+
 ```
 
 /// 全局的Dictionary，key 是 pthread_t， value 是 CFRunLoopRef
@@ -609,10 +633,12 @@ CFRunLoopRef CFRunLoopGetCurrent() {
     return _CFRunLoopGet(pthread_self());
 }
 ```
+
 苹果开发的接口中并没有直接创建Runloop的接口，如果需要使用Runloop通常CFRunLoopGetMain()和CFRunLoopGetCurrent()两个方法来获取（通过上面的源代码也可以看到，核心逻辑在_CFRunLoopGet_当中）,通过代码并不难发现其实只有当我们使用线程的方法主动get Runloop时才会在第一次创建该线程的Runloop，同时将它保存在全局的Dictionary中（线程和Runloop二者一一对应），默认情况下线程并不会创建Runloop（主线程的Runloop比较特殊，任何线程创建之前都会保证主线程已经存在Runloop），同时在线程结束的时候也会销毁对应的Runloop。
 
 
 iOS开发过程中对于开发者而言更多的使用的是NSRunloop,它默认提供了三个常用的run方法：
+
 ```
 - (void)run; 
 - (void)runUntilDate:(NSDate *)limitDate;
@@ -625,6 +651,7 @@ iOS开发过程中对于开发者而言更多的使用的是NSRunloop,它默认�
 - 2.使用第二种启动方式，可以设置超时时间，在超时时间到达之前，runLoop会一直运行，在此期间runLoop会处理来自输入源的数据，并且也会在NSDefaultRunLoopMode模式下重复调用 - (BOOL)runMode:(NSRunLoopMode)mode beforeDate:(NSDate *)limitDate;方法 
 
 - 3.使用第三种方法runLoop会运行一次，超时时间到达或者一个输入源被处理，则runLoop就会自动退出 
+
 
 ```
 至此runloop的底层实现原理已经大致做了介绍，之后会更新runloop的应用篇，详细介绍iOS中苹果对runloop的应用及一些知名三方SDK对runloop的实战应用！！
