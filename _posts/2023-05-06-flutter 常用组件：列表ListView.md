@@ -10,7 +10,7 @@ tags:
     - flutter
 ---
 
-#1、通过构造方法直接构建
+# 1、通过构造方法直接构建
 ListView 提供了一个默认构造函数 ListView，我们可以通过设置它的 children 参数，很方便地将所有的子 Widget 包含到 ListView 中。
 
 不过，这种创建方式要求提前将所有子 Widget 一次性创建好，而不是等到它们真正在屏幕上需要显示时才创建，所以有一个很明显的缺点，就是性能不好。因此，这种方式仅适用于列表中含有少量元素的场景。
@@ -51,7 +51,7 @@ ListView 提供了一个默认构造函数 ListView，我们可以通过设置�
 ListTile 是 Flutter 提供的用于快速构建列表项元素的一个小组件单元，用于 1~3 行（leading、title、subtitle）展示文本、图标等视图元素的场景，通常与 ListView 配合使用。
 
 
-#2、通过ListView.builder构建
+# 2、通过ListView.builder构建
 
 - ListView 的另一个构造函数 ListView.builder，则适用于子 Widget 比较多的场景。这个构造函数有两个关键参数：
 
@@ -78,7 +78,7 @@ ListTile 是 Flutter 提供的用于快速构建列表项元素的一个小组�
 |itemExtent|每行高度|
 |itemBuilder|生成每行的视图|
 
-#3、通过ListView.separated构建分割线列表
+# 3、通过ListView.separated构建分割线列表
 
 ```
  Widget _listView2(){
