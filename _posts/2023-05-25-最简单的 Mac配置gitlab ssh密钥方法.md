@@ -2,7 +2,7 @@
 layout:     post
 title:      最简单的 Mac配置gitlab ssh密钥方法
 subtitle:   最简单的 Mac配置gitlab ssh密钥方法
-date:       2023-05-04
+date:       2023-05-25
 author:     LXY
 header-img: img/home1.jpeg
 catalog: true
