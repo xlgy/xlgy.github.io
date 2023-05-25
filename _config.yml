@@ -12,7 +12,7 @@ github_repo: "https://github.com/xlgy/xlgy.github.io.git" # you code repository
 # Sidebar settings
 sidebar: true                           # whether or not using Sidebar.
 sidebar-about-description: "得之坦然,失之淡然,争其必然,顺其自然!"
-sidebar-avatar: /img/home.jpeg     # use absolute URL, seeing it's used in both `/` and `/about/`
+sidebar-avatar: /img/head.jpg     # use absolute URL, seeing it's used in both `/` and `/about/`
 
 
 
