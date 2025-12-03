@@ -25,11 +25,13 @@ Swift中的block比较简单，相比OC更加简洁
 
 ```
 let block变量名 =  {(形参列表) in
+	return 返回值
 }
 
-
+			
 let myBlock = { (string: String) in
     print("\(string)")
+    return 1
 }
 
 ```
@@ -39,12 +41,15 @@ let myBlock = { (string: String) in
 在项目中，通常会重新定义block的类型的别名，然后用别名来定义block的类型
 
 ```
-typealias myBlock = (String) -> Void
+typealias myBlock = (String) -> String
 
 
 let block:myBlock = {s in
-            
+	return "hello \(s)"
 }
+
+
+print(myBlock("block"))
 ```
 
 # 二、Block变量截获
