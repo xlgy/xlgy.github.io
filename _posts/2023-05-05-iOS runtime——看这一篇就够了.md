@@ -328,7 +328,7 @@ map_images(unsigned count, const char * const paths[],
 **2、+load方法**
 Apple文档是这样描述的：
 
-![](https://images.xiaozhuanlan.com/photo/2022/6ff52f4c0b8a37593cd8537b52b22c96.png)
+![](https://youke1.picui.cn/s1/2025/12/04/69316cd71dd44.png)
 
 load函数调用特点如下:
 当类被引用进项目的时候就会执行load函数(在main函数开始执行之前）,与这个类是否被用到无关,每个类的load函数只会自动调用一次.由于load函数是系统自动加载的，因此不需要调用父类的load函数，否则父类的load函数会多次执行。
