@@ -608,7 +608,7 @@ private:
 
 **_objc_msgForward**消息转发需要做的几件事：
 
-1. 调用**+ (BOOL)resolveInstanceMethod:(SEL)sel(或 + (BOOL)resolveClassMethod:(SEL)sel)**方法，在此方法中添加相应selector以及IMP即可，允许用户在此时为该Class动态添加实现。如果有实现了，则调用并返回YES，那么重新开始**objc_msgSend**流程。对象会响应这个选择器，一般是因为它已经调用过class_addMethod。如果仍没实现，继续下面的步骤
+1. 调用**+ (BOOL)resolveInstanceMethod:(SEL)sel(或 + (BOOL)resolveClassMethod:(SEL)sel)**方法，在此方法中添加响应selector以及IMP即可，允许用户在此时为该Class动态添加实现。如果有实现了，则调用并返回YES，那么重新开始**objc_msgSend**流程。对象会响应这个选择器，一般是因为它已经调用过class_addMethod。如果仍没实现，继续下面的步骤
 
 2. 调用**- (id)forwardingTargetForSelector:(SEL)aSelector**方法，尝试找到一个能相应该消息的对象。如果获取到，则直接把消息转发给它，返回非nil对象。否则返回 nil ，继续下面的动作。
 
@@ -636,15 +636,11 @@ private:
 }
 ```
 
-```_class_resolveInstanceMethod```源码解析
+
+**_class_resolveInstanceMethod**源码解析
+
 
 ```
-/***********************************************************************
-* _class_resolveInstanceMethod
-* Call +resolveInstanceMethod, looking for a method to be added to class cls.
-* cls may be a metaclass or a non-meta class.
-* Does not check if the method already exists.
-**********************************************************************/
 static void _class_resolveInstanceMethod(id inst, SEL sel, Class cls)
 {
     SEL resolve_sel = @selector(resolveInstanceMethod:);
