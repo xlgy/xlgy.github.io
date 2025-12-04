@@ -386,7 +386,7 @@ initialize在类或者其子类的第一个方法被调用前调用。即使类�
 
 **Compile Sources文件顺序如图：**
 
-![](https://images.xiaozhuanlan.com/photo/2022/b44e2ca4ce8c55f1fc8e41841c123932.png)
+![](https://youke1.picui.cn/s1/2025/12/04/69317a3f6f40d.png)
 
 每一个类和分类里面都实现+(void)initialize方法
 
