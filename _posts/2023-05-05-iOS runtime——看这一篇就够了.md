@@ -613,7 +613,7 @@ private:
 2. 调用**- (id)forwardingTargetForSelector:(SEL)aSelector**方法，尝试找到一个能相应该消息的对象。如果获取到，则直接把消息转发给它，返回非nil对象。否则返回 nil ，继续下面的动作。
 
 3. 调用 **- (NSMethodSignature \*)methodSignatureForSelector:(SEL)aSelector** 方法，尝试获得一个方法签名。如果能获取，则返回非nil：创建一个 NSlnvocation 并传给forwardInvocation:
-调用**- (void)forwardInvocation:(NSInvocation \*)**anInvocation方法，将获取到的方法签名包装成 Invocation 传入，如何处理就在这里面了，并返回非nil。如果获取不到，则直接调用4抛出异常。
+调用**- (void)forwardInvocation:(NSInvocation \*)anInvocation**方法，将获取到的方法签名包装成 Invocation 传入，如何处理就在这里面了，并返回非nil。如果获取不到，则直接调用4抛出异常。
 
 4. 调用**- (void)doesNotRecognizeSelector:(SEL)aSelector**，默认的实现是抛出异常。如果第3步没能获得一个方法签名，执行该步骤。
 
