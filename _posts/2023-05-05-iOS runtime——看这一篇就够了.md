@@ -91,7 +91,7 @@ class_rw_t* data() {
 
 **3、isa指针与superclass相关逻辑图**
 
-![isa逻辑图](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/16ceb53974d7405680ef5df5759c3687~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?)
+![isa逻辑图](https://youke1.picui.cn/s1/2025/12/04/69317773eb4a2.png)
 
 
 **4、总结 + 代码校验**
@@ -233,7 +233,7 @@ struct class_rw_t {
 class_rw_t生成在运行时，在编译期间，class_ro_t结构体就已经确定，objc_class中的bits的data部分存放着该结构体的地址。在runtime运行之后，具体说来是在运行runtime的realizeClass 方法时，会生成class_rw_t结构体，该结构体包含了class_ro_t，并且更新data部分，换成class_rw_t结构体的地址。
 
 类的realizeClass运行之前：
-![](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/9b6882be387a4617a2c4261dd13d071d~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?)
+![](https://youke1.picui.cn/s1/2025/12/04/6931777307f6a.png)
 
 然后在加载 ObjC 运行时的过程中在 realizeClass 方法中：
 - 从 class_data_bits_t 调用 data 方法，将结果从 class_rw_t 强制转换为 class_ro_t 指针
@@ -253,7 +253,7 @@ cls->setData(rw);
 
 realizeClass 方法执行过后的类所占用内存的布局：
 
-![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bbbd0dc95b504d6c9fad19983b1b42ca~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp?)
+![](https://youke1.picui.cn/s1/2025/12/04/693177725e70c.png)
 
 细看两个结构体的成员变量会发现很多相同的地方，他们都存放着当前类的属性、实例变量、方法、协议等等。区别在于：class_ro_t存放的是编译期间就确定的；而class_rw_t是在runtime时才确定，它会先将class_ro_t的内容拷贝过去，然后再将当前类的分类的这些属性、方法等拷贝到其中。所以可以说class_rw_t是class_ro_t的超集，当然实际访问类的方法、属性等也都是访问的class_rw_t中的内容。
 
