@@ -590,36 +590,35 @@ private:
 
 **2、缓存逻辑**
 
-- (1) 当一个对象接收到消息时[obj message];，首先根据obj的isa指针进入它的类对象class里面。
-- (2) 在obj的class里面，首先到缓存cache_t里面查询方法message的函数实现，如果找到，就直接调用该函数。
-- (3) 如果上一步没有找到对应函数，在对该class的方法列表进行二分/遍历查找，如果找到了对应函数，首先会将该方法缓存到obj的类对象**class**的cache_t里面，然后对函数进行调用。
-- (4) 在每次进行缓存操作之前，首先需要检查缓存容量，如果缓存内的方法数量超过规定的临界值(设定容量的3/4)，需要先对缓存进行2倍扩容，**原先缓存过的方法全部丢弃**，然后将当前方法存入扩容后的新缓存内。
-- (5) 如果在obj的**class**对象里面，发现缓存和方法列表都找不到mssage方法，则通过class的superclass指针进入它的父类对象**father_class**里面
-- (6) 进入**father_class**后，首先在它的cache_t里面查找mssage，如果找到了该方法，那么会首先将方法缓存到消息接受者obj的类对象**class**的cache_t里面，然后调用方法对应的函数。
-- (7) 如果上一步没有找到方法，将会对**father_class**的方法列表进行遍历二分/遍历查找，如果找到了mssage方法，那么同样，会首先将方法缓存到消息接受者obj的类对象**class**的cache_t里面，然后调用方法对应的函数。需要注意的是，**这里并不会将方法缓存到当前父类对象father_class的cache_t里面**。
-- (8) 如果还没找到方法，则会通过**father_class**的superclass进入更上层的父类对象里面，按照(6)->(7)->(8)步骤流程重复。如果此时已经到了基类对象NSObject，仍没有找到mssage，则进入步骤(9)
+1. 当一个对象接收到消息时[obj message];，首先根据obj的isa指针进入它的类对象class里面。
+2. 在obj的class里面，首先到缓存cache_t里面查询方法message的函数实现，如果找到，就直接调用该函数。
+3. 如果上一步没有找到对应函数，在对该class的方法列表进行二分/遍历查找，如果找到了对应函数，首先会将该方法缓存到obj的类对象**class**的cache_t里面，然后对函数进行调用。
+4. 在每次进行缓存操作之前，首先需要检查缓存容量，如果缓存内的方法数量超过规定的临界值(设定容量的3/4)，需要先对缓存进行2倍扩容，**原先缓存过的方法全部丢弃**，然后将当前方法存入扩容后的新缓存内。
+5. 如果在obj的**class**对象里面，发现缓存和方法列表都找不到mssage方法，则通过class的superclass指针进入它的父类对象**father_class**里面
+6. 进入**father_class**后，首先在它的cache_t里面查找mssage，如果找到了该方法，那么会首先将方法缓存到消息接受者obj的类对象**class**的cache_t里面，然后调用方法对应的函数。
+7. 如果上一步没有找到方法，将会对**father_class**的方法列表进行遍历二分/遍历查找，如果找到了mssage方法，那么同样，会首先将方法缓存到消息接受者obj的类对象**class**的cache_t里面，然后调用方法对应的函数。需要注意的是，**这里并不会将方法缓存到当前父类对象father_class的cache_t里面**。
+8. 如果还没找到方法，则会通过**father_class**的superclass进入更上层的父类对象里面，按照(6)->(7)->(8)步骤流程重复。如果此时已经到了基类对象NSObject，仍没有找到mssage，则进入步骤(9)
 
 
-### 六、消息转发1
+### 六、消息转发
 
 
-```_objc_msgForward```是IMP类型的，用于消息转发的，当像一个对象发送消息，但他没有实现的时候，```_objc_msgForward```会尝试做消息转发。
-```objc_msgSend```的动作比较清晰，在“消息传递”过程中，：首先在 Class 中的缓存查找 IMP （没缓存则初始化缓存），如果没找到，则向父类的 Class 查找。如果一直查找到根类仍旧没有实现，则用```_objc_msgForward```函数指针代替 IMP 。最后，执行这个 IMP 。
+**_objc_msgForward**是IMP类型的，用于消息转发的，当像一个对象发送消息，但他没有实现的时候，**_objc_msgForward**会尝试做消息转发。
+**objc_msgSend**的动作比较清晰，在“消息传递”过程中，：首先在 Class 中的缓存查找 IMP （没缓存则初始化缓存），如果没找到，则向父类的 Class 查找。如果一直查找到根类仍旧没有实现，则用**_objc_msgForward**函数指针代替 IMP 。最后，执行这个 IMP 。
 
-```_objc_msgForward```消息转发需要做的几件事：
+**_objc_msgForward**消息转发需要做的几件事：
 
-
-- 1.  调用+ (BOOL)resolveInstanceMethod:(SEL)sel(或 + (BOOL)resolveClassMethod:(SEL)sel)方法，在此方法中添加相应selector以及IMP即可，允许用户在此时为该Class动态添加实现。如果有实现了，则调用并返回YES，那么重新开始objc_msgSend流程。对象会相应这个选择器，一般是因为它已经调用过class_addMethod。如果仍没实现，继续下面的步骤
-- 2.  调用- (id)forwardingTargetForSelector:(SEL)aSelector方法，尝试找到一个能相应该消息的对象。如果获取到，则直接把消息转发给它，返回非nil对象。否则返回 nil ，继续下面的动作。
-- 3.  调用- (NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector方法，尝试获得一个方法签名。如果能获取，则返回非nil：创建一个 NSlnvocation 并传给forwardInvocation:
-调用- (void)forwardInvocation:(NSInvocation *)anInvocation方法，将获取到的方法签名包装成 Invocation 传入，如何处理就在这里面了，并返回非nil。如果获取不到，则直接调用4抛出异常。
-- 4.  调用```- (void)doesNotRecognizeSelector:(SEL)aSelector```，默认的实现是抛出异常。如果第3步没能获得一个方法签名，执行该步骤。
+1. 调用**+ (BOOL)resolveInstanceMethod:(SEL)sel(或 + (BOOL)resolveClassMethod:(SEL)sel)**方法，在此方法中添加相应selector以及IMP即可，允许用户在此时为该Class动态添加实现。如果有实现了，则调用并返回YES，那么重新开始**objc_msgSend**流程。对象会相应这个选择器，一般是因为它已经调用过class_addMethod。如果仍没实现，继续下面的步骤
+2. 调用**- (id)forwardingTargetForSelector:(SEL)aSelector**方法，尝试找到一个能相应该消息的对象。如果获取到，则直接把消息转发给它，返回非nil对象。否则返回 nil ，继续下面的动作。
+3. 调用 **- (NSMethodSignature \*)methodSignatureForSelector:(SEL)aSelector** 方法，尝试获得一个方法签名。如果能获取，则返回非nil：创建一个 NSlnvocation 并传给forwardInvocation:
+调用**- (void)forwardInvocation:(NSInvocation \*)**anInvocation方法，将获取到的方法签名包装成 Invocation 传入，如何处理就在这里面了，并返回非nil。如果获取不到，则直接调用4抛出异常。
+4. 调用**- (void)doesNotRecognizeSelector:(SEL)aSelector**，默认的实现是抛出异常。如果第3步没能获得一个方法签名，执行该步骤。
 
 
 **第一步：Method resolution 方法解析处理阶段**
 
-如果调用了对象方法首先会进行```+(BOOL)resolveInstanceMethod:(SEL)sel```判断
-如果调用了类方法 首先会进行 ```+(BOOL)resolveClassMethod:(SEL)sel```判断
+如果调用了对象方法首先会进行**+(BOOL)resolveInstanceMethod:(SEL)sel**判断
+如果调用了类方法 首先会进行 **+(BOOL)resolveClassMethod:(SEL)sel**判断
 两个方法都为类方法；
 
 
