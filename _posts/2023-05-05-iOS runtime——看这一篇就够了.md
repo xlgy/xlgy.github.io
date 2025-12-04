@@ -345,7 +345,7 @@ load函数调用特点如下:
 
 **Compile Sources文件顺序如图：**
 
-![](https://images.xiaozhuanlan.com/photo/2022/b44e2ca4ce8c55f1fc8e41841c123932.png)
+![](https://youke1.picui.cn/s1/2025/12/04/69317a3f6f40d.png)
 
 每一个类和分类里面都实现+(void)load方法
 
@@ -370,7 +370,7 @@ load函数调用特点如下:
 
 Apple文档是这样描述的：
 
-![](https://images.xiaozhuanlan.com/photo/2022/432d6992c4dc0e184bee2114945cc8f7.png)
+![](https://youke1.picui.cn/s1/2025/12/04/69317c3ab8b62.png)
 
 initialize函数调用特点如下:
 initialize在类或者其子类的第一个方法被调用前调用。即使类文件被引用进项目,但是没有使用,initialize不会被调用。由于是系统自动调用，也不需要再调用 [super initialize] ，否则父类的initialize会被多次执行。假如这个类放到代码中，而这段代码并没有被执行，这个函数是不会被执行的
