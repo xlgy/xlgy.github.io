@@ -680,6 +680,50 @@ static void _class_resolveInstanceMethod(id inst, SEL sel, Class cls)
 
 这两个方法是最先走到的方法，可以在这两个方法中动态的添加方法，进行消息转发。这里有一个需要特别注意的地方，**类方法需要添加到元类里面**，原因这里就不赘述了。
 
+代码实例：
+
+```
+#import "MissMethodClass.h"
+#import <objc/runtime.h>
+
+@implementation MissMethodClass
+
+- (void)myTest:(NSString *)string1 withString:(NSString *)string2{
+    NSLog(@"消息转发成功 string1:%@。string2:%@",string1,string2);
+}
+
++ (BOOL)resolveInstanceMethod:(SEL)sel{
+    if (sel == @selector(test:)) {
+        Method myTestMethod = class_getInstanceMethod([self class], NSSelectorFromString(@"myTest:withString:"));
+        class_addMethod([self class], sel, method_getImplementation(myTestMethod), method_getTypeEncoding(myTestMethod));
+        return YES;
+    }
+    return [super forwardingTargetForSelector:sel];
+}
+
+@end
+```
+
+实例代码中在resolveInstanceMethod方法中处理方法名为**@selector(test:)**的消息，并动态添加方法实现，并且可以接收两个参数
+
+调用代码：
+
+```
+    MissMethodClass *model = [MissMethodClass new];
+    [model performSelector:@selector(test:) withObject:@"参数1" withObject:@"参数2"];
+```
+
+结果日志：
+
+```
+消息转发成功 string1:参数1。string2:参数2
+```
+
+
+
+
+
+
 
 **第二步:Fast forwarding 快速转发阶段**
 
@@ -713,6 +757,7 @@ static void _class_resolveInstanceMethod(id inst, SEL sel, Class cls)
 ```
 
 ***自动签名***
+
 ```
 -(NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector{
     //如果返回为nil则进行自动签名
