@@ -326,7 +326,7 @@ NSNotificationName const loginMgrNot_loginSuccess = @"loginMgrNot_loginSuccess";
 外部使用监听消息
 
 ```
-[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginSuccess) name:loginSuccess object:nil];
+[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginSuccess) name:loginMgrNot_loginSuccess object:nil];
 ```
 
 
