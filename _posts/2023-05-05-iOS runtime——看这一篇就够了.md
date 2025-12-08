@@ -43,7 +43,7 @@ typedef struct objc_object *id;
 
 ```
  NSObject *obj = [[NSObject alloc] init];
- NSLog(@"class_getInstanceSize--%zd", class_getInstanceSize([NSObject new]));
+ NSLog(@"class_getInstanceSize--%zd", class_getInstanceSize([obj class]));
 ```
 输出结果：
 ```
