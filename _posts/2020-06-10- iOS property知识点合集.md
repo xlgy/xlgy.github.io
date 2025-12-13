@@ -1,8 +1,8 @@
 ---
 layout:     post
-title:      property知识点合集
-subtitle:   property知识点合集
-date:       2023-05-05
+title:      iOS property知识点合集
+subtitle:   iOS property知识点合集
+date:       2020-06-10
 author:     LXY
 header-img: img/home1.jpeg
 catalog: true
