@@ -22,7 +22,8 @@ iOS UILabel只提供了水平方向的文字位置设置，也就是我们常用
 
 **实现原理**：利用往文字后面活前面下面添加”\n”来实现文字填充满整个UILable控件实现置顶/置顶效果
 
-###1、新建分类(UILabel+TextAlign)，添加枚举类型属性textVerticalAlignType
+### 1、新建分类(UILabel+TextAlign)，添加枚举类型属性textVerticalAlignType
+
 ```
 #import <UIKit/UIKit.h>
 
@@ -48,7 +49,9 @@ typedef NS_ENUM(NSInteger,TextVerticalAlignType){
 NS_ASSUME_NONNULL_END
 ```
 
+
 熟悉iOS的runtime都知道，给分类添加属性不能直接添加，需要重写set/get方法，并使用对象相关联保存值
+
 
 ```
 
@@ -64,7 +67,9 @@ static char * textVerticalAlignTypeKey = "textVerticalAlignTypeKey";
     objc_setAssociatedObject(self, &textVerticalAlignTypeKey, @(textVerticalAlignType), OBJC_ASSOCIATION_ASSIGN);
 }
 ```
-###2、更新文本内容，实现置顶/置底
+
+### 2、更新文本内容，实现置顶/置底
+
 ```
 
 -(void)upadteTextAlignType{
@@ -100,7 +105,7 @@ static char * textVerticalAlignTypeKey = "textVerticalAlignTypeKey";
 
 
 
-###3、测试代码及效果
+### 3、测试代码及效果
 
 ```
 @implementation ViewController
@@ -120,9 +125,11 @@ static char * textVerticalAlignTypeKey = "textVerticalAlignTypeKey";
 }
 ```
 
-![置顶](https://images.xiaozhuanlan.com/photo/2022/42ad5c446133f9b22a8f15a05d04b773.png)
+
+![置顶](https://youke2.picui.cn/s1/2025/12/13/693d2fd51db3d.png)
 
 ```
 lb.textVerticalAlignType = TextVerticalAlignTypeBottom;
 ```
-![置底](https://images.xiaozhuanlan.com/photo/2022/b705756812ec4d0e54351bafeb625421.png)
+
+![置底](https://youke2.picui.cn/s1/2025/12/13/693d2fd52c1b4.png)
