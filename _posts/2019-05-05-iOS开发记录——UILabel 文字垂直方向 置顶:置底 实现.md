@@ -1,7 +1,8 @@
 ---
 layout:     post
 title:      iOS开发记录——UILabel 文字垂直方向 置顶/置底 实现
-subtitle:   iOS开发记录——UILabel 文字垂直方向 置顶/置底 实现date:       2019-05-05
+subtitle:   iOS开发记录——UILabel 文字垂直方向 置顶/置底 实现
+date:       2019-05-05
 author:     LXY
 header-img: img/home1.jpeg
 catalog: true
