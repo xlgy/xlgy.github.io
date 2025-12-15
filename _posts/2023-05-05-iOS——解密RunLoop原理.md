@@ -657,9 +657,9 @@ iOS开发过程中对于开发者而言更多的使用的是NSRunloop,它默认�
 - 3.使用第三种方法runLoop会运行一次，超时时间到达或者一个输入源被处理，则runLoop就会自动退出 
 
 
-```
+
 至此runloop的底层实现原理已经大致做了介绍，之后会更新runloop的应用篇，详细介绍iOS中苹果对runloop的应用及一些知名三方SDK对runloop的实战应用！！
-```
+
 
 参考资料：
 [iOS刨根问底-深入理解RunLoop](https://www.cnblogs.com/kenshincui/p/6823841.html)
