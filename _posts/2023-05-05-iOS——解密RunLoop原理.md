@@ -84,10 +84,10 @@ SInt32 CFRunLoopRunSpecific(CFRunLoopRef rl, CFStringRef modeName, CFTimeInterva
 ```
 通知 observers：RunLoop 要开始进入 loop 了。紧接着就进入 loop。
 
-- 2.1 CFRunLoopRun源码（由于源码量比较大，这里就不全部贴出来了，只贴出来核心步骤）
+### 2.2 CFRunLoopRun源码（由于源码量比较大，这里就不全部贴出来了，只贴出来核心步骤）
 
 
-**第一步**
+#### 第一步
 
 开启一个 do while 来保活线程。通知 Observers：RunLoop 会触发 Timer 回调、Source0 回调，接着执行加入的 block
 ```
@@ -116,7 +116,8 @@ if (MACH_PORT_NULL != dispatchPort ) {
 
 
 
-**第二步**
+#### 第二步
+
 回调触发后，通知 Observers：RunLoop 的线程将进入休眠（sleep）状态。
 ```
 
@@ -127,7 +128,7 @@ if (!poll && (currentMode->_observerMask & kCFRunLoopBeforeWaiting)) {
 ```
 
 
-**第三步**
+#### 第三步
 
 进入休眠后，会等待 mach_port 的消息，以再次唤醒。只有在下面四个事件出现时才会被再次唤醒：
 - 基于 port 的 Source 事件；
@@ -149,7 +150,7 @@ do {
 } while (1);
 ```
 
-**第四步**
+#### 第四步
 
 唤醒时通知 Observer：RunLoop 的线程刚刚被唤醒了。
 
@@ -158,7 +159,8 @@ if (!poll && (currentMode->_observerMask & kCFRunLoopAfterWaiting))
     __CFRunLoopDoObservers(runloop, currentMode, kCFRunLoopAfterWaiting);
 ```
 
-**第五步**
+#### 第五步
+
 RunLoop 被唤醒后就要开始处理消息了：
 
 - 如果是 Timer 时间到的话，就触发 Timer 的回调；
@@ -189,7 +191,7 @@ else {
 }
 ```
 
-**第六步**
+#### 第六步
 
 根据当前 RunLoop 的状态来判断是否需要走下一个 loop。当被外部强制停止或 loop 超时时，就不继续下一个 loop 了，否则继续走下一个 loop 。
 
@@ -213,7 +215,7 @@ if (sourceHandledThisLoop && stopAfterHandle) {
 整个 RunLoop 过程，我们可以总结为如下所示的一张图片。
 ![](https://images.xiaozhuanlan.com/photo/2022/4fc04d50a2d911df6d8ef508bd55983e.webp)
 
-**总结**
+#### 总结
 
 将整个流程总结成伪代码如下：
 
@@ -657,7 +659,7 @@ iOS开发过程中对于开发者而言更多的使用的是NSRunloop,它默认�
 - 3.使用第三种方法runLoop会运行一次，超时时间到达或者一个输入源被处理，则runLoop就会自动退出 
 
 
-
+ 
 至此runloop的底层实现原理已经大致做了介绍，之后会更新runloop的应用篇，详细介绍iOS中苹果对runloop的应用及一些知名三方SDK对runloop的实战应用！！
 
 
