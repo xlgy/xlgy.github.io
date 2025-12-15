@@ -11,25 +11,25 @@ tags:
 ---
 
 
-```
-本文篇幅比较长，创作的目的为了自己日后温习知识所用，希望这篇文章能对你有所帮助。如发现任何有误之处，恳请留言纠正，谢谢。
-```
 
-## 前言
+本文篇幅比较长，创作的目的为了自己日后温习知识所用，希望这篇文章能对你有所帮助。如发现任何有误之处，恳请留言纠正，谢谢。
+
+
+# 前言
 **RunLoop作为iOS中一个基础组件和线程有着千丝万缕的关系，同时也是很多常见技术的幕后功臣。尽管在平时多数开发者很少直接使用RunLoop，但是理解RunLoop可以帮助开发者更好的利用多线程编程模型，同时也可以帮助开发者解答日常开发中的一些疑惑。**
 
 **这篇文章将从 CFRunLoop 的源码入手，介绍 RunLoop 的概念以及底层实现原理。之后会介绍一下在 iOS 中，苹果是如何利用 RunLoop 实现自动释放池、延迟回调、触摸事件、屏幕刷新等功能的**
 
-## 一、什么是 RunLoop？
+# 一、什么是 RunLoop？
 可以理解为字面意思：Run 表示运行，Loop 表示循环。结合在一起就是运行的循环的意思。NSRunloop是CFRunloop的封装，CFRunloop是一套C接口。
 
 RunLoop 这个对象，在 iOS 里由 CFRunLoop 实现。简单来说，RunLoop 是用来监听输入源，进行调度处理的。这里的输入源可以是输入设备、网络、周期性或者延迟时间、异步回调。RunLoop 会接收两种类型的输入源：一种是来自另一个线程或者来自不同应用的异步消息；另一种是来自预订时间或者重复间隔的同步事件。
 
-## 二、源码解析runloop流程
+# 二、源码解析runloop流程
 
 [苹果runloop源码](https://opensource.apple.com/source/CF/CF-855.17/CFRunLoop.c)
 
-#### 1、入口方法CFRunLoopRun
+## 1、入口方法CFRunLoopRun
 ```
 void CFRunLoopRun(void) {	/* DOES CALLOUT */
     int32_t result;
@@ -41,11 +41,12 @@ void CFRunLoopRun(void) {	/* DOES CALLOUT */
 ```
 通过代码可以看出来，如果kCFRunLoopRunStopped != result && kCFRunLoopRunFinished != result，则一直会循环执行CFRunLoopRunSpecific函数
 
-#### 2、循环执行的函数 
+## 2、循环执行的函数 
 
 **CFRunLoopRun -> CFRunLoopRunSpecific -> CFRunLoopRun**
 
-- 2.1 CFRunLoopRunSpecific源码
+### 2.1 CFRunLoopRunSpecific源码
+
 ```
 SInt32 CFRunLoopRunSpecific(CFRunLoopRef rl, CFStringRef modeName, CFTimeInterval seconds, Boolean returnAfterSourceHandled) {     /* DOES CALLOUT */
     CHECK_FOR_FORK();
@@ -325,9 +326,10 @@ int CFRunLoopRunSpecific(runloop, modeName, seconds, stopAfterHandle) {
 注意的是尽管CFRunLoopPerformBlock在上图中作为唤醒机制有所体现，但事实上执行CFRunLoopPerformBlock只是入队，下次RunLoop运行才会执行，而如果需要立即执行则必须调用CFRunLoopWakeUp。
 ````
 
-## 三、Runloop Mode
+# 三、Runloop Mode
 
-**1、一"码"当先**
+### 1、一"码"当先
+
 ```
 	struct __CFRunLoop {
 	    CFRuntimeBase _base;
@@ -391,7 +393,7 @@ CFRunLoopRef和CFRunloopMode、CFRunLoopSourceRef/CFRunloopTimerRef/CFRunLoopObs
 ![](https://images.xiaozhuanlan.com/photo/2022/ce513ac3c728b1066e6862bc0ea9e88f.png)
 ![](https://images.xiaozhuanlan.com/photo/2022/a1cea8833d7dab00ed9151ffe0c5fce7.png)
 
-**2、RunLoop Source**
+### 2、RunLoop Source
 
 苹果文档将RunLoop能够处理的事件分为Input sources和timer事件。下面这张图取自苹果官网:
 ![](https://images.xiaozhuanlan.com/photo/2022/28b88c411f421839be65945e28a9ebdc.jpg)
@@ -456,7 +458,7 @@ source0和source1由联合_context来做代码区分：
    1. Source1 :基于mach_Port的,来自系统内核或者其他进程或线程的事件，可以主动唤醒休眠中的RunLoop（iOS里进程间通信开发过程中我们一般不主动使用）。mach_port大家就理解成进程间相互发送消息的一种机制就好, 比如屏幕点击, 网络数据的传输都会触发sourse1。
   2. Source0 ：非基于Port的 处理事件，什么叫非基于Port的呢？就是说你这个消息不是其他进程或者内核直接发送给你的。一般是APP内部的事件, 比如hitTest:withEvent的处理, performSelectors的事件。
 
-**3、RunLoop Timer**
+### 3、RunLoop Timer
 
 **我们经常使用的timer有几种？**
 - NSTimer & PerformSelector:afterDelay:(由RunLoop处理，内部结构为CFRunLoopTimerRef)
@@ -518,7 +520,7 @@ Timer的触发流程大致是这样的：
 在RunLoop中，NSTimer在激活时，会将休眠中的RunLoop通过_timerPort唤醒,(如果是通过GCD实现的NSTimer，则会通过另一个CGD queue专用mach port)。
 
 
-**4、RunLoop Observer**
+### 4、RunLoop Observer
 
 Observer在CF中的结构如下：
 
@@ -565,7 +567,8 @@ _objc_autoreleasePoolPush() 创建自动释放池。其 order 是-2147483647，�
 
 相对来说CFRunloopObserverRef理解起来并不复杂，它相当于消息循环中的一个监听器，随时通知外部当前RunLoop的运行状态（它包含一个函数指针_callout_将当前状态及时告诉观察者）。
 
-**5、Call out**
+### 5、Call out
+
 在开发过程中几乎所有的操作都是通过Call out进行回调的(无论是Observer的状态通知还是Timer、Source的处理)，而系统在回调时通常使用如下几个函数进行回调(换句话说你的代码其实最终都是通过下面几个函数来负责调用的，即使你自己监听Observer也会先调用下面的函数然后间接通知你，所以在调用堆栈中经常看到这些函数)：
 
 ```
@@ -583,14 +586,15 @@ _objc_autoreleasePoolPush() 创建自动释放池。其 order 是-2147483647，�
 
 
 
-## 四、Runloop和线程的关系
+# 四、Runloop和线程的关系
 RunLoop和线程是息息相关的,我们知道线程的作用是用来执行特定的一个或多个任务,但是在默认情况下,线程执行完之后就会退出,就不能再执行任务了。这时我们就需要采用一种方式来让线程能够处理任务,并不退出。所以,我们就有了RunLoop。
 
 iOS开发中能遇到两个线程对象: pthread_t和NSThread，pthread_t和NSThread 是一一对应的。比如，你可以通过 pthread_main_thread_np()或 [NSThread mainThread]来获取主线程；也可以通过pthread_self()或[NSThread currentThread]来获取当前线程。CFRunLoop 是基于 pthread 来管理的。
 
 线程与RunLoop是一一对应的关系（对应关系保存在一个全局的Dictionary里），线程创建之后是没有RunLoop的（主线程除外），RunLoop的创建是发生在第一次获取时,销毁则是在线程结束的时候。只能在当前线程中操作当前线程的RunLoop,而不能去操作其他线程的RunLoop。
 
-**一"码"当先**
+### 一"码"当先
+
 
 ```
 
