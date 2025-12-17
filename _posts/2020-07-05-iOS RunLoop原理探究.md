@@ -1,8 +1,8 @@
 ---
 layout:     post
-title:      iOS——解密RunLoop原理
-subtitle:   iOS——解密RunLoop原理
-date:       2023-05-05
+title:      iOS RunLoop原理探究
+subtitle:   iOS RunLoop原理探究
+date:       2020-07-05
 author:     LXY
 header-img: img/home1.jpeg
 catalog: true
@@ -263,10 +263,10 @@ int CFRunLoopRunSpecific(runloop, modeName, seconds, stopAfterHandle) {
             }
  
             /// 7. 调用 mach_msg 等待接受 mach_port 的消息。线程将进入休眠, 直到被下面某一个事件唤醒。
-            /// ? 一个基于 port 的Source 的事件。
-            /// ? 一个 Timer 到时间了
-            /// ? RunLoop 自身的超时时间到了
-            /// ? 被其他什么调用者手动唤醒
+            /// 一个基于 port 的Source 的事件。
+            /// 一个 Timer 到时间了
+            /// RunLoop 自身的超时时间到了
+            /// 被其他什么调用者手动唤醒
             __CFRunLoopServiceMachPort(waitSet, &msg, sizeof(msg_buffer), &livePort) {
                 mach_msg(msg, MACH_RCV_MSG, port); // thread wait for receive msg
             }
