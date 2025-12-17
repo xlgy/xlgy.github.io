@@ -27,7 +27,7 @@ RunLoop 这个对象，在 iOS 里由 CFRunLoop 实现。简单来说，RunLoop 
 
 # 二、源码解析runloop流程
 
-[苹果runloop源码](https://opensource.apple.com/source/CF/CF-855.17/CFRunLoop.c)
+[苹果runloop源码](https://github.com/opensource-apple/CF/blob/master/CFRunLoop.c)
 
 ## 1、入口方法CFRunLoopRun
 ```
@@ -213,7 +213,7 @@ if (sourceHandledThisLoop && stopAfterHandle) {
 ```
 
 整个 RunLoop 过程，我们可以总结为如下所示的一张图片。
-![](https://images.xiaozhuanlan.com/photo/2022/4fc04d50a2d911df6d8ef508bd55983e.webp)
+![](https://youke2.picui.cn/s1/2025/12/17/6942aa6c9c9f0.png)
 
 #### 总结
 
@@ -323,10 +323,12 @@ int CFRunLoopRunSpecific(runloop, modeName, seconds, stopAfterHandle) {
 
 ```
 **下图描述了Runloop运行流程**
-![](https://images.xiaozhuanlan.com/photo/2022/762be992641d52c808a15181d5007668.png)
-```
+
+![](https://youke2.picui.cn/s1/2025/12/17/6942ac62e81fd.png)
+
+
 注意的是尽管CFRunLoopPerformBlock在上图中作为唤醒机制有所体现，但事实上执行CFRunLoopPerformBlock只是入队，下次RunLoop运行才会执行，而如果需要立即执行则必须调用CFRunLoopWakeUp。
-````
+
 
 # 三、Runloop Mode
 
@@ -392,13 +394,13 @@ int CFRunLoopRunSpecific(runloop, modeName, seconds, stopAfterHandle) {
 **NSDefaultRunLoopMode**和 **UITrackingRunLoopMode**（注意：并不是说Runloop会运行在**kCFRunLoopCommonModes**这种模式下，而是相当于分别注册了 **NSDefaultRunLoopMode** 和 **UITrackingRunLoopMode**。当然你也可以通过调用CFRunLoopAddCommonMode()方法将自定义Mode放到 **kCFRunLoopCommonModes**组合）。
 
 CFRunLoopRef和CFRunloopMode、CFRunLoopSourceRef/CFRunloopTimerRef/CFRunLoopObserverRef关系如下图：
-![](https://images.xiaozhuanlan.com/photo/2022/ce513ac3c728b1066e6862bc0ea9e88f.png)
-![](https://images.xiaozhuanlan.com/photo/2022/a1cea8833d7dab00ed9151ffe0c5fce7.png)
+![](https://youke2.picui.cn/s1/2025/12/17/6942ade7686f5.png)
+![](https://youke2.picui.cn/s1/2025/12/17/6942adef98a38.png)
 
 ### 2、RunLoop Source
 
 苹果文档将RunLoop能够处理的事件分为Input sources和timer事件。下面这张图取自苹果官网:
-![](https://images.xiaozhuanlan.com/photo/2022/28b88c411f421839be65945e28a9ebdc.jpg)
+![](https://youke2.picui.cn/s1/2025/12/17/6942af060bd2a.png)
 根据CF的源码，Input source在RunLoop中被分类成source0和source1两大类。source0和source1均有结构体__CFRunLoopSource表示：
 
 ```
@@ -584,7 +586,7 @@ _objc_autoreleasePoolPush() 创建自动释放池。其 order 是-2147483647，�
 
 例如在控制器的touchBegin中打入断点查看堆栈（由于UIEvent是Source0，所以可以看到一个Source0的Call out函数CFRUNLOOP_IS_CALLING_OUT_TO_A_SOURCE0_PERFORM_FUNCTION调用）：
 
-![](https://images.xiaozhuanlan.com/photo/2022/1e5b46ef0e3523b1b110facf95ac382d.png)
+![](https://youke2.picui.cn/s1/2025/12/17/6942af061a1e2.png)
 
 
 
