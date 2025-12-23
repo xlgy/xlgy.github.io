@@ -11,7 +11,7 @@ tags:
 ---
 
 
-之前已经介绍过RunLoop原理，感兴趣的同学可以阅读[iOS——解密RunLoop原理](https://xiaozhuanlan.com/topic/9503712864)；本文将从RunLoop的应用场景出发，介绍RunLoop的实际应用。
+之前已经介绍过RunLoop原理，感兴趣的同学可以阅读[iOS RunLoop原理探究](https://xiaozhuanlan.com/topic/9503712864)；本文将从RunLoop的应用场景出发，介绍RunLoop的实际应用。
 
 本文篇幅比较长，创作的目的为了自己日后温习知识所用，希望这篇文章能对你有所帮助。如发现任何有误之处，恳请留言纠正，谢谢。
 
@@ -26,11 +26,13 @@ iOS设备的事件响应，是有RunLoop参与的。
 当我们的APP在接收到任何事件请求之前，main RunLoop都是处于mach_msg_trap休眠状态中的，那么，又是谁唤醒它的呢？
 
 借助lldb，执行：
+
 ```
 po [NSRunLoop mainRunLoop]
 ```
 
 打印信息如下：
+
 ```
 <CFRunLoop 0x60000307c900 [0x1dc655ae0]>{wakeup port = 0x2203, stopped = false, ignoreWakeUps = false, 
 current mode = kCFRunLoopDefaultMode,
@@ -197,7 +199,7 @@ entries =>
 所以：**系统肯定还有一个子线程，用来接收事件并唤醒main thread，并将事件传递到main thread上！！**
 
 
-![查看xcode线程信息](https://images.xiaozhuanlan.com/photo/2022/4ddfe66c6290961a93f00f0c599bd1ba.png)
+![查看xcode线程信息](https://youke2.picui.cn/s1/2025/12/23/694a98d48cfc2.png)
 
 他的名字叫做:
 ```
