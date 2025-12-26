@@ -11,7 +11,7 @@ tags:
 ---
 
 
-之前已经介绍过RunLoop原理，感兴趣的同学可以阅读[iOS RunLoop原理探究](https://xiaozhuanlan.com/topic/9503712864)；本文将从RunLoop的应用场景出发，介绍RunLoop的实际应用。
+之前已经介绍过RunLoop原理，感兴趣的同学可以阅读[iOS RunLoop原理探究](https://xlgy.github.io/2020/07/05/iOS-RunLoop%E5%8E%9F%E7%90%86%E6%8E%A2%E7%A9%B6/)；本文将从RunLoop的应用场景出发，介绍RunLoop的实际应用。
 
 本文篇幅比较长，创作的目的为了自己日后温习知识所用，希望这篇文章能对你有所帮助。如发现任何有误之处，恳请留言纠正，谢谢。
 
@@ -200,6 +200,7 @@ entries =>
 
 
 ![查看xcode线程信息](https://youke2.picui.cn/s1/2025/12/23/694a98d48cfc2.png)
+
 
 他的名字叫做:
 ```
