@@ -16,8 +16,8 @@ tags:
 
 
 ### 一、深入代码理解 instance、class object、metaclass
+![](https://github.com/xlgy/xlgy.github.io/blob/master/_posts/image/runtime1.png?raw=true)
 
-![](https://raw.githubusercontent.com/xlgy/xlgy.github.io/refs/heads/master/_posts/image/runtime1.png)
 
 **1、instance对象实例**
 
@@ -91,7 +91,8 @@ class_rw_t* data() {
 
 **3、isa指针与superclass相关逻辑图**
 
-![isa逻辑图](https://youke2.picui.cn/s1/2025/12/26/694e90c49cbd8.png)
+
+![isa逻辑图](https://github.com/xlgy/xlgy.github.io/blob/master/_posts/image/runtime2.png?raw=true)
 
 
 **4、总结 + 代码校验**
@@ -233,7 +234,9 @@ struct class_rw_t {
 class_rw_t生成在运行时，在编译期间，class_ro_t结构体就已经确定，objc_class中的bits的data部分存放着该结构体的地址。在runtime运行之后，具体说来是在运行runtime的realizeClass 方法时，会生成class_rw_t结构体，该结构体包含了class_ro_t，并且更新data部分，换成class_rw_t结构体的地址。
 
 类的realizeClass运行之前：
-![](https://youke2.picui.cn/s1/2025/12/26/694e90c385251.png)
+
+![](https://github.com/xlgy/xlgy.github.io/blob/master/_posts/image/runtime3.png?raw=true)
+
 
 然后在加载 ObjC 运行时的过程中在 realizeClass 方法中：
 - 从 class_data_bits_t 调用 data 方法，将结果从 class_rw_t 强制转换为 class_ro_t 指针
@@ -253,7 +256,8 @@ cls->setData(rw);
 
 realizeClass 方法执行过后的类所占用内存的布局：
 
-![](https://youke2.picui.cn/s1/2025/12/26/694e90b71eb12.png)
+![](https://github.com/xlgy/xlgy.github.io/blob/master/_posts/image/runtime4.png?raw=true)
+
 
 细看两个结构体的成员变量会发现很多相同的地方，他们都存放着当前类的属性、实例变量、方法、协议等等。区别在于：class_ro_t存放的是编译期间就确定的；而class_rw_t是在runtime时才确定，它会先将class_ro_t的内容拷贝过去，然后再将当前类的分类的这些属性、方法等拷贝到其中。所以可以说class_rw_t是class_ro_t的超集，当然实际访问类的方法、属性等也都是访问的class_rw_t中的内容。
 
@@ -328,7 +332,9 @@ map_images(unsigned count, const char * const paths[],
 **2、+load方法**
 Apple文档是这样描述的：
 
-![](https://youke2.picui.cn/s1/2025/12/26/694e90ba28afc.png)
+
+![](https://github.com/xlgy/xlgy.github.io/blob/master/_posts/image/runtime5.png?raw=true)
+
 
 load函数调用特点如下:
 当类被引用进项目的时候就会执行load函数(在main函数开始执行之前）,与这个类是否被用到无关,每个类的load函数只会自动调用一次.由于load函数是系统自动加载的，因此不需要调用父类的load函数，否则父类的load函数会多次执行。
@@ -345,7 +351,9 @@ load函数调用特点如下:
 
 **Compile Sources文件顺序如图：**
 
-![](https://youke2.picui.cn/s1/2025/12/26/694e927ee7ac2.png)
+
+![](https://github.com/xlgy/xlgy.github.io/blob/master/_posts/image/runtime6.png?raw=true)
+
 
 每一个类和分类里面都实现+(void)load方法
 
@@ -370,7 +378,9 @@ load函数调用特点如下:
 
 Apple文档是这样描述的：
 
-![](https://youke2.picui.cn/s1/2025/12/26/694e92a2e3337.png)
+
+![](https://github.com/xlgy/xlgy.github.io/blob/master/_posts/image/runtime7.png?raw=true)
+
 
 initialize函数调用特点如下:
 initialize在类或者其子类的第一个方法被调用前调用。即使类文件被引用进项目,但是没有使用,initialize不会被调用。由于是系统自动调用，也不需要再调用 [super initialize] ，否则父类的initialize会被多次执行。假如这个类放到代码中，而这段代码并没有被执行，这个函数是不会被执行的
@@ -386,7 +396,9 @@ initialize在类或者其子类的第一个方法被调用前调用。即使类�
 
 **Compile Sources文件顺序如图：**
 
-![](https://youke2.picui.cn/s1/2025/12/26/694e927ee7ac2.png)
+
+![](https://github.com/xlgy/xlgy.github.io/blob/master/_posts/image/runtime6.png?raw=true)
+
 
 每一个类和分类里面都实现+(void)initialize方法
 

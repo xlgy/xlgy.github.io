@@ -42,9 +42,10 @@ RunLoop 这个对象，在 iOS 里由 CFRunLoop 实现。简单来说，RunLoop 
 **CFRunLoopModeRef** 类并没有对外暴露，只是通过 CFRunLoopRef 的接口进行了封装。他们的关系如下:
 
 
-![](https://youke2.picui.cn/s1/2025/12/23/694a7af3245e6.png)
-![](https://youke2.picui.cn/s1/2025/12/17/6942ade7686f5.png)
-![](https://youke2.picui.cn/s1/2025/12/17/6942adef98a38.png)
+![](https://raw.githubusercontent.com/xlgy/xlgy.github.io/refs/heads/master/_posts/image/runloop3.png)
+![](https://raw.githubusercontent.com/xlgy/xlgy.github.io/refs/heads/master/_posts/image/runloop4.png)
+
+![](https://raw.githubusercontent.com/xlgy/xlgy.github.io/refs/heads/master/_posts/image/runloop7.png)
 
 一个 RunLoop 包含若干个 Mode，每个 Mode 又包含若干个 Source/Timer/Observer。每次调用 RunLoop 的主函数时，只能指定其中一个 Mode，这个Mode被称作 CurrentMode。如果需要切换 Mode，只能退出 Loop，再重新指定一个 Mode 进入。这样做主要是为了分隔开不同组的 Source/Timer/Observer，让其互不影响。
 
@@ -122,7 +123,7 @@ RunLoop 这个对象，在 iOS 里由 CFRunLoop 实现。简单来说，RunLoop 
 - Source1 包含了一个 mach_port 和一个回调（函数指针），被用于通过内核和其他线程相互发送消息。这种 Source 能主动唤醒 RunLoop 的线程，其原理在下面会讲到。
 
 苹果文档将RunLoop能够处理的事件分为Input sources和timer事件。下面这张图取自苹果官网:
-![](https://youke2.picui.cn/s1/2025/12/17/6942af060bd2a.png)
+![](https://raw.githubusercontent.com/xlgy/xlgy.github.io/refs/heads/master/_posts/image/runloop5.png)
 根据CF的源码，Input source在RunLoop中被分类成source0和source1两大类。source0和source1均有结构体__CFRunLoopSource表示：
 
 ```
@@ -520,7 +521,7 @@ if (sourceHandledThisLoop && stopAfterHandle) {
 ```
 
 整个 RunLoop 过程，我们可以总结为如下所示的一张图片。
-![](https://youke2.picui.cn/s1/2025/12/17/6942aa6c9c9f0.png)
+![](https://raw.githubusercontent.com/xlgy/xlgy.github.io/refs/heads/master/_posts/image/runloop1.png)
 
 #### 总结
 
@@ -631,7 +632,7 @@ int CFRunLoopRunSpecific(runloop, modeName, seconds, stopAfterHandle) {
 ```
 **下图描述了Runloop运行流程**
 
-![](https://youke2.picui.cn/s1/2025/12/17/6942ac62e81fd.png)
+![](https://raw.githubusercontent.com/xlgy/xlgy.github.io/refs/heads/master/_posts/image/runloop2.png)
 
 
 注意的是尽管CFRunLoopPerformBlock在上图中作为唤醒机制有所体现，但事实上执行CFRunLoopPerformBlock只是入队，下次RunLoop运行才会执行，而如果需要立即执行则必须调用CFRunLoopWakeUp。
@@ -781,7 +782,7 @@ iOS开发过程中对于开发者而言更多的使用的是NSRunloop,它默认�
 
 在控制器的touchBegin中打入断点查看堆栈（由于UIEvent是Source0，所以可以看到一个Source0的Call out函数CFRUNLOOP_IS_CALLING_OUT_TO_A_SOURCE0_PERFORM_FUNCTION调用）：
 
-![](https://youke2.picui.cn/s1/2025/12/17/6942af061a1e2.png)
+![](https://raw.githubusercontent.com/xlgy/xlgy.github.io/refs/heads/master/_posts/image/runloop6.png)
 
 
 
