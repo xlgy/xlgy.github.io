@@ -59,7 +59,7 @@ swift 没有__block关键字，默认闭包获取外部变量是地址获取(类
 ```
         var testNum = 1
         var testString:String = "1"
-                let block = {(num:Int)  in
+        let block = {(num:Int)  in
             print("num:\(num)  testNum:\(testNum)  testString:\(testString)")
             testNum = 3
             testString = "3"
