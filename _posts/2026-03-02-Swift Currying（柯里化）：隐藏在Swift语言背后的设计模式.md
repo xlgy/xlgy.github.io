@@ -7,7 +7,7 @@ author:     LXY
 header-img: img/home1.jpeg
 catalog: true
 tags:
-    - iOS
+    - Swift
 ---
 
 
