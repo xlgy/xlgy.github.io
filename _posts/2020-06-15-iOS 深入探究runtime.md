@@ -274,7 +274,7 @@ struct method_t {
 };
 ```
 
-变量介绍可以参考之前文章：[iOS 代码注入—— hook 实践](https://xlgy.github.io/2023/05/05/iOS-%E4%BB%A3%E7%A0%81%E6%B3%A8%E5%85%A5-hook-%E5%AE%9E%E8%B7%B5/)
+变量介绍可以参考之前文章：[iOS 代码注入—— hook 实践](https://xlgy.github.io/2020/06/16/iOS-hook-%E5%AE%9E%E8%B7%B5-%E5%8A%A8%E6%80%81%E6%B3%A8%E5%85%A5/)
    
 ### 三、Runtime 初始化函数
 
