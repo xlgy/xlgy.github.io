@@ -1,7 +1,7 @@
 ---
 layout:     post
-title:      Swift闭包block
-subtitle:   Swift闭包block
+title:      Swift中的block——Closure
+subtitle:   Swift中的block——Closure
 date:       2025-12-01
 author:     LXY
 header-img: img/home1.jpeg
@@ -93,7 +93,7 @@ testNum:3  testString:3
 
 这种情况闭包对变量的捕获是值捕获，内部更改变量值也会变异报错！！
 
-# 三、逃逸闭包
+# 三、@escaping关键字逃逸闭包
 
 当闭包在函数返回后仍需执行（如异步操作、回调等），需用@escaping修饰。
 @escaping是Swift中用于标记闭包的属性，表示该闭包的作用域会超出其定义函数的范围，需特别注意内存管理和循环引用问题。
@@ -114,8 +114,44 @@ testNum:3  testString:3
 在示例中闭包mblock会在方法执行完之后被调用，会超出函数test的范围，所以需要标识为逃逸闭包，否则会变异报错
 
 
+# 四、@autoclosure关键字
 
 
+`@autoclosure` 会 **自动把表达式包装成一个 closure**。
 
+Closure 版本
 
+```
+func log(_ value: () -> Int) {
+    print(value())
+}
+```
+
+调用必须写：
+
+```
+log { 1 + 2 }
+```
+
+因为参数是 closure。
+
+使用 @autoclosure
+
+```
+func log(_ value: @autoclosure () -> Int) {
+    print(value())
+}
+```
+
+现在可以：
+
+```
+log(1 + 2)
+```
+
+但实际上编译器帮你变成：
+
+```
+log({ 1 + 2 })
+```
 
