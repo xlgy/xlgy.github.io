@@ -1,8 +1,7 @@
-# 
 ---
 layout:     post
-title:      iOS 并发编程进阶：NSOperation 深度解析（含高级用法与 GCD 对比）
-subtitle:   iOS 并发编程进阶：NSOperation 深度解析（含高级用法与 GCD 对比）
+title:      iOS并发编程进阶：NSOperation 深度解析
+subtitle:   iOS并发编程进阶：NSOperation 深度解析
 date:       2026-03-09
 author:     LXY
 header-img: img/home1.jpeg
